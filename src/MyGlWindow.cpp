@@ -28,7 +28,7 @@ MyGlWindow::MyGlWindow(int w, int h)
 	setupBuffer();
 
 	model = new Model();
-	model->cow();
+	model->torus();
 }
 
 void MyGlWindow::draw()

@@ -13,7 +13,7 @@ find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
 
 # Add source to this project's executable.
-add_executable(project "src/main.cpp" "src/MyGlWindow.h" "src/MyGlWindow.cpp" "src/Loader.h" "src/cube.h" "src/Viewer.cpp" "src/Viewer.h" "src/model.h" "src/model.cpp" "src/Viewer.h")
+add_executable(project "src/main.cpp" "src/MyGlWindow.h" "src/MyGlWindow.cpp" "src/Loader.h" "src/cube.h" "src/Viewer.cpp" "src/Viewer.h" "src/model.h" "src/model.cpp" "src/Viewer.h" "src/torus.cpp" "src/torus.h")
 #raster3d.cpp cow.h ppm_io.cpp ppm_io.h
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)

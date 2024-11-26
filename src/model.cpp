@@ -1,20 +1,29 @@
 #include "model.h"
 #include "cow.h"
 #include "cube.h"
+#include "torus.h"
+
+void Model::torus() {
+	std::vector<glm::vec3> verts;
+	std::vector<uint32_t> elements;
+
+	generateTorusVerts(verts, normals, elements, 5, 4, 50, 50);
+	Model::setup(verts, elements);
+}
 
 void Model::cube() {
+	generate_normals(cow_vertices, cow_nvertices);
 	Model::setup(cube_vertices, cube_nvertices);
 }
 
 void Model::cow() {
+	generate_normals(cow_vertices, cow_nvertices);
 	Model::setup(cow_vertices, cow_nvertices);
 }
 
-void Model::setup(const std::vector<glm::vec3> &vertices, const std::vector<uint32_t> &nvertices)
-{
+void Model::generate_normals(const std::vector<glm::vec3> &vertices, const std::vector<uint32_t> &nvertices) {
 	normals.resize(vertices.size());
 
-	std::cout << vertices.size() << "  " << nvertices.size() << std::endl;
 	for (auto i = 0; i < nvertices.size() / 3; ++i) {
 		const glm::vec3& v0 = vertices[nvertices[i * 3]]; //1st vertex
 		const glm::vec3& v1 = vertices[nvertices[i * 3 + 1]]; //2nd vertex
@@ -29,9 +38,10 @@ void Model::setup(const std::vector<glm::vec3> &vertices, const std::vector<uint
 	for (auto i = 0; i < normals.size(); ++i) {
 		normals[i] = glm::normalize(normals[i]);
 	}
+}
 
-	GLuint ibo_cow_elements;
-
+void Model::setup(const std::vector<glm::vec3> &vertices, const std::vector<uint32_t> &nvertices)
+{
 	glCreateVertexArrays(1, &vaoHandle);
 	glCreateBuffers(1, &vbo_vertices);
 	glCreateBuffers(1, &vbo_normals);
