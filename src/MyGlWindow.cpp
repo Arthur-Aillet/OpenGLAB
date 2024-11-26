@@ -28,16 +28,12 @@ MyGlWindow::MyGlWindow(int w, int h)
 	setupBuffer();
 
 	model = new Model();
-	model->setup();
-	/*
-		cube = new ColorCube();
-	cube->setup();
-	*/
+	model->cow();
 }
 
 void MyGlWindow::draw()
 {
-	glClearColor(0.2, 0.2, 0.2, 1); //background color R G B A
+	glClearColor((GLfloat) 0.2,(GLfloat) 0.2,(GLfloat) 0.2, 1); //background color R G B A
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST); // enable depth test
 

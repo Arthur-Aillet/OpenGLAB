@@ -1,10 +1,21 @@
 #include "model.h"
+#include "cow.h"
+#include "cube.h"
 
-void Model::setup() //Call from constructor
+void Model::cube() {
+	Model::setup(cube_vertices, cube_nvertices);
+}
+
+void Model::cow() {
+	Model::setup(cow_vertices, cow_nvertices);
+}
+
+void Model::setup(const std::vector<glm::vec3> &vertices, const std::vector<uint32_t> &nvertices)
 {
-	normals.resize(1732);
+	normals.resize(vertices.size());
 
-	for (auto i = 0; i < 9468 / 3; ++i) {
+	std::cout << vertices.size() << "  " << nvertices.size() << std::endl;
+	for (auto i = 0; i < nvertices.size() / 3; ++i) {
 		const glm::vec3& v0 = vertices[nvertices[i * 3]]; //1st vertex
 		const glm::vec3& v1 = vertices[nvertices[i * 3 + 1]]; //2nd vertex
 		const glm::vec3& v2 = vertices[nvertices[i * 3 + 2]]; //3rd vertex
@@ -26,13 +37,13 @@ void Model::setup() //Call from constructor
 	glCreateBuffers(1, &vbo_normals);
 	glCreateBuffers(1, &ibo_elements); //Gluint ibo_cow_elements
 
-	glNamedBufferData(vbo_vertices, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glNamedBufferData(vbo_vertices, vertices.size() * sizeof(float) * 3, vertices.data(), GL_STATIC_DRAW);
 	glVertexArrayVertexBuffer(vaoHandle, 0, vbo_vertices, 0, sizeof(float) * 3);
 
 	glNamedBufferData(vbo_normals, normals.size() * sizeof(float) * 3, normals.data(), GL_STATIC_DRAW);
 	glVertexArrayVertexBuffer(vaoHandle, 1, vbo_normals, 0, sizeof(float) * 3);
 
-	glNamedBufferData(ibo_elements, sizeof(nvertices), nvertices, GL_STATIC_DRAW);
+	glNamedBufferData(ibo_elements, nvertices.size() * sizeof(uint32_t), nvertices.data(), GL_STATIC_DRAW);
 	glVertexArrayElementBuffer(vaoHandle, ibo_elements);
 
 	glVertexArrayAttribFormat(vaoHandle, 0, 3, GL_FLOAT, GL_FALSE, 0);
@@ -47,7 +58,7 @@ void Model::setup() //Call from constructor
 void Model::draw()
 {
 	glBindVertexArray(vaoHandle);
-	int size = 1732;
+	int size;
 	glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
 	glDrawElements(GL_TRIANGLES, size / sizeof(uint32_t), GL_UNSIGNED_INT, 0);
 }

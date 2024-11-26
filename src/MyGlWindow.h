@@ -3,7 +3,6 @@
 #include <string>
 #include "Loader.h"
 #include "model.h"
-#include "colorCube.h"
 #include "Viewer.h"
 #include <glm/gtc/type_ptr.hpp>	
 
