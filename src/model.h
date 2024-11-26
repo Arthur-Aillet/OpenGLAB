@@ -19,4 +19,6 @@ public:
 	void cow();
 	void cube();
 	void torus();
+	void sphere();
+	void teapot();
 };

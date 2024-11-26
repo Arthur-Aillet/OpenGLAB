@@ -1,13 +1,29 @@
 #include "model.h"
 #include "cow.h"
 #include "cube.h"
-#include "torus.h"
+#include "shapes.h"
 
 void Model::torus() {
 	std::vector<glm::vec3> verts;
 	std::vector<uint32_t> elements;
 
-	generateTorusVerts(verts, normals, elements, 5, 4, 50, 50);
+	generateTorus(verts, normals, elements, 5, 1, 50, 50);
+	Model::setup(verts, elements);
+}
+
+void Model::sphere() {
+	std::vector<glm::vec3> verts;
+	std::vector<uint32_t> elements;
+
+	generateSphere(verts, normals, elements, 5, 50, 50);
+	Model::setup(verts, elements);
+}
+
+void Model::teapot() {
+	std::vector<glm::vec3> verts;
+	std::vector<uint32_t> elements;
+
+	generateTeapot(verts, normals, elements, 5, glm::mat4(1.0f));
 	Model::setup(verts, elements);
 }
 
@@ -35,8 +51,8 @@ void Model::generate_normals(const std::vector<glm::vec3> &vertices, const std::
 		normals[nvertices[i * 3 + 2]] += n;
 	}
 
-	for (auto i = 0; i < normals.size(); ++i) {
-		normals[i] = glm::normalize(normals[i]);
+	for (auto &normal : normals) {
+		normal = glm::normalize(normal);
 	}
 }
 
