@@ -1,9 +1,11 @@
+#pragma once
+
 #include <iostream>
 #include "GL/gl3w.h"
 #include <string>
-#include "Loader.h"
-#include "model.h"
-#include "Viewer.h"
+#include "Loader.hpp"
+#include "model.hpp"
+#include "Viewer.hpp"
 #include <glm/gtc/type_ptr.hpp>	
 
 struct LightInfo {
@@ -20,9 +22,9 @@ struct MaterialInfo {
 	float Shiness; // Specular shininess factor (phong exponent)
 };
 
-class MyGlWindow {
+class Window {
 public:
-	MyGlWindow(int w, int h);
+	Window(int w, int h);
 	void draw();
 	Viewer *viewer;
 

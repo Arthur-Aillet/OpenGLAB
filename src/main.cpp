@@ -2,7 +2,7 @@
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
 
-#include "MyGlWindow.h"
+#include "Window.h"
 
 bool lbutton_down;
 bool rbutton_down;
@@ -62,7 +62,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 }
 
 
-void mouseDragging(std::shared_ptr<MyGlWindow> win, double width, double height)
+void mouseDragging(std::shared_ptr<Window> win, double width, double height)
 {
     if (lbutton_down) {
         float fractionChangeX = static_cast<float>(cx - m_lastMouseX) / static_cast<float>(width);
@@ -129,7 +129,7 @@ int main() {
     glfwSetWindowTitle(window, "MyOpenGLWindow");
 
 
-    std::shared_ptr<MyGlWindow> win = std::make_shared<MyGlWindow>(width, height);
+    std::shared_ptr<Window> win = std::make_shared<Window>(width, height);
 
     while (!glfwWindowShouldClose(window))
     {

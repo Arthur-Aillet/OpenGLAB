@@ -31,7 +31,8 @@ void main(void)
 	vec3 N = normalize(NormalMatrix * vertexNormal);
 	vec3 ambiant = Material.Ka * Light.Ia;
 	vec3 diffuse = Material.Kd * Light.Id * max(dot(L, N), 0.0);
-	LightIntensity = ambiant + diffuse;
+	//vec3 specular = Material.Kd * Light.Id * max(dot(L, N), 0.0);
+	LightIntensity = ambiant + diffuse;// + specular;
 
 	gl_Position = ModelViewPerspectiveMatrix * vec4(vertexPosition, 1.0);
 }

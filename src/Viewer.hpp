@@ -1,5 +1,3 @@
-// File: Viewer.h
-
 #pragma once
 
 class Viewer;

@@ -1,5 +1,5 @@
-#include "shapes.h"
-#include "teapotData.h"
+#include "shapes.hpp"
+#include "teapotData.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

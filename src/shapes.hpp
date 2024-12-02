@@ -1,5 +1,4 @@
-#ifndef SHAPES_H
-#define SHAPES_H
+#pragma once
 
 #include <glm/mat4x4.hpp>
 #include <vector>
@@ -12,6 +11,3 @@ void generateTorus(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms,
 
 void generateTeapot(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms, std::vector<uint32_t>& elements,
 	int grid, glm::mat4 lidTransform);
-
-
-#endif // SHAPES_H

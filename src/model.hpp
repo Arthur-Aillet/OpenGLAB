@@ -1,7 +1,9 @@
+#pragma once
+
 #include <iostream>
 #include "GL/gl3w.h"
 #include <string>
-#include "Loader.h"
+#include "Loader.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 

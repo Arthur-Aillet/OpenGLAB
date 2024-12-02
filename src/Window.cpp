@@ -1,10 +1,10 @@
-#include "MyGlWindow.h"
+#include "Window.h"
 
 static float DEFAULT_VIEW_POINT[3] = { 14, 14, 14 };
 static float DEFAULT_VIEW_CENTER[3] = { 0, 2, 0 };
 static float DEFAULT_UP_VECTOR[3] = { 0, 1, 0 };
 
-void MyGlWindow::setupBuffer()
+void Window::setupBuffer()
 {
 	shaderProgram = new ShaderProgram();
 	shaderProgram->initFromFiles("shaders/simple.vert", "shaders/simple.frag");
@@ -24,7 +24,7 @@ void MyGlWindow::setupBuffer()
 	shaderProgram->addUniform("NormalMatrix");
 }
 
-MyGlWindow::MyGlWindow(int w, int h)
+Window::Window(int w, int h)
 {
 	m_width = w;
 	m_height = h;
@@ -48,7 +48,7 @@ MyGlWindow::MyGlWindow(int w, int h)
 	models[4]->cube();
 }
 
-void MyGlWindow::draw()
+void Window::draw()
 {
 	glClearColor((GLfloat) 0.2,(GLfloat) 0.2,(GLfloat) 0.2, 1); //background color R G B A
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

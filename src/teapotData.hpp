@@ -1,5 +1,4 @@
-#ifndef TEAPOTDATA_H
-#define TEAPOTDATA_H
+#pragma once
 
 /* Copyright (c) Mark J. Kilgard, 1994. */
 
@@ -202,5 +201,3 @@ namespace Teapot {
     };
 
 }
-
-#endif // TEAPOTDATA_H

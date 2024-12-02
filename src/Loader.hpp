@@ -12,10 +12,7 @@ version : 0.3 - 15 / 01 / 2014
 			work in the exact same way.
 */
 
-
-#ifndef SHADER_PROGRAM_HPP
-#define SHADER_PROGRAM_HPP
-
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -26,8 +23,7 @@ version : 0.3 - 15 / 01 / 2014
 #include <GL/gl.h>
 
 
-class ShaderProgram
-{
+class ShaderProgram {
 private:
 	// static DEBUG flag - if set to false then, errors aside, we'll run completely silent
 	static const bool DEBUG = true;
@@ -400,5 +396,3 @@ public:
 	}
 
 }; // End of class
-
-#endif // SHADER_PROGRAM_HPP
