@@ -3,52 +3,47 @@
 #include "cube.h"
 #include "shapes.h"
 
-void Model::torus() {
-	std::vector<glm::vec3> verts;
-	std::vector<uint32_t> elements;
-
-	generateTorus(verts, normals, elements, 5, 1, 50, 50);
-	Model::setup(verts, elements);
+void Model::torus(float outerRadius, float innerRadius, int sides, int rings) {
+	generateTorus(vertices, normals, elements, outerRadius, innerRadius, sides, rings);
+	Model::setup();
 }
 
-void Model::sphere() {
-	std::vector<glm::vec3> verts;
-	std::vector<uint32_t> elements;
-
-	generateSphere(verts, normals, elements, 5, 50, 50);
-	Model::setup(verts, elements);
+void Model::sphere(float radius, uint32_t slices, uint32_t stacks) {
+	generateSphere(vertices, normals, elements, radius, slices, stacks);
+	Model::setup();
 }
 
-void Model::teapot() {
-	std::vector<glm::vec3> verts;
-	std::vector<uint32_t> elements;
-
-	generateTeapot(verts, normals, elements, 5, glm::mat4(1.0f));
-	Model::setup(verts, elements);
+void Model::teapot(int grid, glm::mat4 lidTransform) {
+	generateTeapot(vertices, normals, elements, grid, lidTransform);
+	Model::setup();
 }
 
 void Model::cube() {
-	generate_normals(cow_vertices, cow_nvertices);
-	Model::setup(cube_vertices, cube_nvertices);
+	vertices = cube_vertices;
+	elements = cube_nvertices;
+	generate_normals();
+	Model::setup();
 }
 
 void Model::cow() {
-	generate_normals(cow_vertices, cow_nvertices);
-	Model::setup(cow_vertices, cow_nvertices);
+	vertices = cow_vertices;
+	elements = cow_nvertices;
+	generate_normals();
+	Model::setup();
 }
 
-void Model::generate_normals(const std::vector<glm::vec3> &vertices, const std::vector<uint32_t> &nvertices) {
+void Model::generate_normals() {
 	normals.resize(vertices.size());
 
-	for (auto i = 0; i < nvertices.size() / 3; ++i) {
-		const glm::vec3& v0 = vertices[nvertices[i * 3]]; //1st vertex
-		const glm::vec3& v1 = vertices[nvertices[i * 3 + 1]]; //2nd vertex
-		const glm::vec3& v2 = vertices[nvertices[i * 3 + 2]]; //3rd vertex
+	for (auto i = 0; i < elements.size() / 3; ++i) {
+		const glm::vec3& v0 = vertices[elements[i * 3]]; //1st vertex
+		const glm::vec3& v1 = vertices[elements[i * 3 + 1]]; //2nd vertex
+		const glm::vec3& v2 = vertices[elements[i * 3 + 2]]; //3rd vertex
 		glm::vec3 n = glm::cross((v1 - v0), (v2 - v0)); //Cross product
 		n = glm::normalize(n);
-		normals[nvertices[i * 3]] += n; //Set the same normal to each vertex
-		normals[nvertices[i * 3 + 1]] += n;
-		normals[nvertices[i * 3 + 2]] += n;
+		normals[elements[i * 3]] += n; //Set the same normal to each vertex
+		normals[elements[i * 3 + 1]] += n;
+		normals[elements[i * 3 + 2]] += n;
 	}
 
 	for (auto &normal : normals) {
@@ -56,7 +51,7 @@ void Model::generate_normals(const std::vector<glm::vec3> &vertices, const std::
 	}
 }
 
-void Model::setup(const std::vector<glm::vec3> &vertices, const std::vector<uint32_t> &nvertices)
+void Model::setup()
 {
 	glCreateVertexArrays(1, &vaoHandle);
 	glCreateBuffers(1, &vbo_vertices);
@@ -69,7 +64,7 @@ void Model::setup(const std::vector<glm::vec3> &vertices, const std::vector<uint
 	glNamedBufferData(vbo_normals, normals.size() * sizeof(float) * 3, normals.data(), GL_STATIC_DRAW);
 	glVertexArrayVertexBuffer(vaoHandle, 1, vbo_normals, 0, sizeof(float) * 3);
 
-	glNamedBufferData(ibo_elements, nvertices.size() * sizeof(uint32_t), nvertices.data(), GL_STATIC_DRAW);
+	glNamedBufferData(ibo_elements, elements.size() * sizeof(uint32_t), elements.data(), GL_STATIC_DRAW);
 	glVertexArrayElementBuffer(vaoHandle, ibo_elements);
 
 	glVertexArrayAttribFormat(vaoHandle, 0, 3, GL_FLOAT, GL_FALSE, 0);

@@ -11,14 +11,17 @@ private:
 	GLuint vaoHandle;
 	GLuint vbo_vertices, vbo_normals;
 	GLuint ibo_elements;
+	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> normals;
-	void setup(const std::vector<glm::vec3> &v, const std::vector<uint32_t>& e);
-	void generate_normals(const std::vector<glm::vec3>& v, const std::vector<uint32_t>& e);
+	std::vector<uint32_t> elements;
+
+	void setup();
+	void generate_normals();
 public:
 	void draw();
 	void cow();
 	void cube();
-	void torus();
-	void sphere();
-	void teapot();
+	void torus(float outerRadius, float innerRadius, int sides, int rings);
+	void sphere(float radius, uint32_t slices, uint32_t stacks);
+	void teapot(int grid, glm::mat4 lidTransform);
 };

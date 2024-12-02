@@ -20,7 +20,7 @@ private:
 	GLuint vbo_vertexColor;
 	GLuint vbo_vertex;
 
-	Model* model;
+	std::vector<std::unique_ptr<Model>> models;
 
 	int m_width;
 	int m_height;

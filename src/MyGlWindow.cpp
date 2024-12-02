@@ -1,7 +1,7 @@
 #include "MyGlWindow.h"
 
 static float DEFAULT_VIEW_POINT[3] = { 14, 14, 14 };
-static float DEFAULT_VIEW_CENTER[3] = { 0, 6, 0 };
+static float DEFAULT_VIEW_CENTER[3] = { 0, 2, 0 };
 static float DEFAULT_UP_VECTOR[3] = { 0, 1, 0 };
 
 void MyGlWindow::setupBuffer()
@@ -27,8 +27,17 @@ MyGlWindow::MyGlWindow(int w, int h)
 	viewer = new Viewer(viewPoint, viewCenter, upVector, 45.0f, aspect);
 	setupBuffer();
 
-	model = new Model();
-	model->teapot();
+	models.push_back(std::make_unique<Model>(Model()));
+	models.push_back(std::make_unique<Model>(Model()));
+	models.push_back(std::make_unique<Model>(Model()));
+	models.push_back(std::make_unique<Model>(Model()));
+	models.push_back(std::make_unique<Model>(Model()));
+
+	models[0]->cow();
+	models[1]->teapot(5, glm::mat4(1.0f));
+	models[2]->sphere(2, 50, 50);
+	models[3]->torus(2, 1, 50, 50);
+	models[4]->cube();
 }
 
 void MyGlWindow::draw()
@@ -40,36 +49,36 @@ void MyGlWindow::draw()
 	// first to parameters: starting point , next two parameters : width and height
 	glViewport(0, 0, m_width, m_height); // set up the screen space
 
-	glm::mat4 modelMatrix = glm::mat4(1.0);
 	glm::vec3 eye = viewer->getViewPoint();
 	glm::vec3 look = viewer->getViewCenter();
 	glm::vec3 up = viewer->getUpVector();
 	glm::mat4 view = glm::lookAt(eye, look, up);
 	glm::mat4 projection = glm::perspective(45.0f, (float)(m_width / m_height), 0.1f, 500.0f);
 
-	glm::mat4 mvp = projection * view * modelMatrix; //Model View Projection Matrix
 	glm::vec4 lightPos(50, 50, 50, 1); //light position
 	glm::vec3 Kd(1, 1, 0); //Diffuse Object Color
 	glm::vec3 Ld(1, 1, 1); //Diffuse Light Color
 	glm::mat4 imvp = glm::inverse(view);
 	glm::mat3 nmat = glm::mat3(glm::transpose(imvp)); //Normal Matrix
-	glm::mat4 mvmat = view * modelMatrix; //Model View Matrix
+	glm::mat4 mvp; //Model View Projection Matrix
+	glm::mat4 mvmat; //Model View Matrix
 
-	//draw something
 	m_shaderProgram->use();
 
-	glUniformMatrix4fv(m_shaderProgram->uniform("mvp"), 1, GL_FALSE, glm::value_ptr(mvp));
 	glUniform4fv(m_shaderProgram->uniform("LightLocation"), 1, glm::value_ptr(lightPos));
 	glUniform3fv(m_shaderProgram->uniform("Kd"), 1, glm::value_ptr(Kd));
 	glUniform3fv(m_shaderProgram->uniform("Ld"), 1, glm::value_ptr(Ld));
 	glUniformMatrix3fv(m_shaderProgram->uniform("NormalMatrix"), 1, GL_FALSE, glm::value_ptr(nmat));
-	glUniformMatrix4fv(m_shaderProgram->uniform("ModelViewMatrix"), 1, GL_FALSE, glm::value_ptr(mvmat));
-	if (model) {
-		model->draw();
+
+	for (uint16_t i = 0; i != models.size(); i++) {
+		glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0), { i * 7 - 14, 0, 0 });
+		glm::mat4 mvp = projection * view * modelMatrix; //Model View Projection Matrix
+		glm::mat4 mvmat = view * modelMatrix; //Model View Matrix
+
+		glUniformMatrix4fv(m_shaderProgram->uniform("ModelViewMatrix"), 1, GL_FALSE, glm::value_ptr(mvmat));
+		glUniformMatrix4fv(m_shaderProgram->uniform("mvp"), 1, GL_FALSE, glm::value_ptr(mvp));
+		models[i]->draw();
 	}
-	/*if (cube) {
-		cube->draw();
-	}*/
 
 	m_shaderProgram->disable();
 	//close shader

@@ -14,10 +14,11 @@ out vec3 LightIntensity;
 
 void main(void)
 {
-	vec3 N = normalize(NormalMatrix * vertexNormal);
 
 	vec4 P = ModelViewMatrix * vec4(vertexPosition, 1); //How to transform the VertexPosition into Eye Coordinate?
-	vec4 L = normalize((ModelViewMatrix * LightLocation) - P); //Vector from Light Locaiton to P
-	LightIntensity = Kd * Ld * max(dot(L.xyz, N), 0); //Calculate Kd*Id*(L意) //Remember that if (L意) < 0, set it to 0.
+	vec3 L = normalize(((ModelViewMatrix * LightLocation) - P).xyz); //Vector from Light Locaiton to P
+	vec3 N = normalize(NormalMatrix * vertexNormal);
+	//vec3 V = normalize(-P.xyz);
+	LightIntensity = Kd * Ld * max(dot(L, N), 0); //Calculate Kd*Id*(L意) //Remember that if (L意) < 0, set it to 0.
 	gl_Position = mvp * vec4(vertexPosition, 1.0);
 }
