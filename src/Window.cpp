@@ -1,4 +1,4 @@
-#include "Window.h"
+#include "Window.hpp"
 
 static float DEFAULT_VIEW_POINT[3] = { 14, 14, 14 };
 static float DEFAULT_VIEW_CENTER[3] = { 0, 2, 0 };
@@ -65,11 +65,10 @@ void Window::draw()
 
 	glm::mat3 nmat;
 	glm::mat4 mvp; //Model View Projection Matrix
-	glm::mat4 mv; //Model View Matrix
 
 	// LightInfo instance
 	LightInfo light = {
-		view * glm::vec4(12.f, 12.f, 12.f, 1.f),  // Position
+		glm::vec4(12.f, 12.f, 12.f, 1.f),  // Position
 		glm::vec3(0.2f, 0.2f, 0.2f),       // Ia
 		glm::vec3(0.8f, 0.8f, 0.8f),       // Id
 		glm::vec3(1.f, 1.f, 1.f)           // Is
@@ -103,10 +102,9 @@ void Window::draw()
 			modelMatrix = glm::rotate(modelMatrix, glm::radians(-90.f), glm::vec3(1, 0, 0));
 		}
 		glm::mat4 mvp = projection * view * modelMatrix; //Model View Projection Matrix
-		glm::mat4 mv = view * modelMatrix; //Model View Matrix
-		nmat = glm::mat3(glm::transpose(glm::inverse(mv))); //Normal Matrix
+		nmat = glm::mat3(glm::transpose(glm::inverse(modelMatrix))); //Normal Matrix
 
-		glUniformMatrix4fv(shaderProgram->uniform("ModelViewMatrix"), 1, GL_FALSE, glm::value_ptr(mv));
+		glUniformMatrix4fv(shaderProgram->uniform("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
 		glUniformMatrix4fv(shaderProgram->uniform("ModelViewPerspectiveMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
 		glUniformMatrix3fv(shaderProgram->uniform("NormalMatrix"), 1, GL_FALSE, glm::value_ptr(nmat));
 		models[i]->draw();

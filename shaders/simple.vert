@@ -21,12 +21,13 @@ uniform MaterialInfo Material;
 
 uniform mat4 ModelViewPerspectiveMatrix;
 uniform mat3 NormalMatrix;
-uniform mat4 ModelViewMatrix;
+//uniform vec3 CameraPosition;
+uniform mat4 ModelMatrix;
 out vec3 LightIntensity;
 
 void main(void)
 {
-	vec4 P = ModelViewMatrix * vec4(vertexPosition, 1);
+	vec4 P = ModelMatrix * vec4(vertexPosition, 1);
 	vec3 L = normalize((Light.Position - P).xyz);
 	vec3 N = normalize(NormalMatrix * vertexNormal);
 	vec3 ambiant = Material.Ka * Light.Ia;
