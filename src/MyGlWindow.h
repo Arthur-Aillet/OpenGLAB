@@ -6,6 +6,20 @@
 #include "Viewer.h"
 #include <glm/gtc/type_ptr.hpp>	
 
+struct LightInfo {
+	glm::vec4 Position; // Light position in eye coords.
+	glm::vec3 Ia; // Ambient light intensity
+	glm::vec3 Id; // Diffuse light intensity
+	glm::vec3 Is; // Specular light intensity
+};
+
+struct MaterialInfo {
+	glm::vec3 Ka; // Ambient reflectivity
+	glm::vec3 Kd; // Diffuse reflectivity
+	glm::vec3 Ks; // Specular reflectivity
+	float Shiness; // Specular shininess factor (phong exponent)
+};
+
 class MyGlWindow {
 public:
 	MyGlWindow(int w, int h);
@@ -13,7 +27,7 @@ public:
 	Viewer *viewer;
 
 private:
-	ShaderProgram* m_shaderProgram;
+	ShaderProgram* shaderProgram;
 
 	GLuint vaoHandle; // vertex array object
 	GLuint vbo_vertexPosition; // vbo : vertex Buffer object
