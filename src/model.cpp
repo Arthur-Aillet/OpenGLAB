@@ -1,7 +1,7 @@
-#include "model.h"
-#include "cow.h"
-#include "cube.h"
-#include "shapes.h"
+#include "model.hpp"
+#include "cow.hpp"
+#include "shapes.hpp"
+#include <stdio.h>
 
 void Model::torus(float outerRadius, float innerRadius, int sides, int rings) {
 	generateTorus(vertices, normals, elements, outerRadius, innerRadius, sides, rings);
@@ -18,9 +18,8 @@ void Model::teapot(int grid, glm::mat4 lidTransform) {
 	Model::setup();
 }
 
-void Model::cube() {
-	vertices = cube_vertices;
-	elements = cube_nvertices;
+void Model::cube(float size) {
+	generateCube(vertices, elements, size);
 	generate_normals();
 	Model::setup();
 }

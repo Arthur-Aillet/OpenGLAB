@@ -22,7 +22,7 @@ private:
 public:
 	void draw();
 	void cow();
-	void cube();
+	void cube(float size);
 	void torus(float outerRadius, float innerRadius, int sides, int rings);
 	void sphere(float radius, uint32_t slices, uint32_t stacks);
 	void teapot(int grid, glm::mat4 lidTransform);

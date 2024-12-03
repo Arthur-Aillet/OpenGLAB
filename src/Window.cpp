@@ -19,8 +19,9 @@ void Window::setupBuffer()
 	shaderProgram->addUniform("Material.Ks");
 	shaderProgram->addUniform("Material.Shiness");
 
-	shaderProgram->addUniform("ModelViewMatrix");
+	shaderProgram->addUniform("CameraPosition");
 	shaderProgram->addUniform("ModelViewPerspectiveMatrix");
+	shaderProgram->addUniform("ModelMatrix");
 	shaderProgram->addUniform("NormalMatrix");
 }
 
@@ -45,7 +46,7 @@ Window::Window(int w, int h)
 	models[1]->teapot(5, glm::mat4(1.f));
 	models[2]->sphere(2, 50, 50);
 	models[3]->torus(2, 1, 50, 50);
-	models[4]->cube();
+	models[4]->cube(2);
 }
 
 void Window::draw()
@@ -85,6 +86,8 @@ void Window::draw()
 	shaderProgram->use();
 
 	// Set LightInfo uniforms
+	glUniform3fv(shaderProgram->uniform("CameraPosition"), 1, glm::value_ptr(eye));
+	
 	glUniform4fv(shaderProgram->uniform("Light.Position"), 1, glm::value_ptr(light.Position));
 	glUniform3fv(shaderProgram->uniform("Light.Ia"), 1, glm::value_ptr(light.Ia));
 	glUniform3fv(shaderProgram->uniform("Light.Id"), 1, glm::value_ptr(light.Id));

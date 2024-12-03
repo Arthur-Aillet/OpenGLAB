@@ -11,3 +11,5 @@ void generateTorus(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms,
 
 void generateTeapot(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms, std::vector<uint32_t>& elements,
 	int grid, glm::mat4 lidTransform);
+
+void generateCube(std::vector<glm::vec3>& verts, std::vector<uint32_t>& elements, float size);

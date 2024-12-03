@@ -312,6 +312,51 @@ void generateSphere(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms
 	}
 }
 
+void generateCube(std::vector<glm::vec3>& verts, std::vector<uint32_t>& elements, float size) {
+    size /= 2;
+
+    verts = {
+        {-size, -size, -size},
+        {-size, -size, +size},
+        {-size, +size, +size},
+        {-size, +size, -size},
+
+        {+size, +size, +size},
+        {+size, -size, +size},
+        {+size, -size, -size},
+        {+size, +size, -size},
+
+        {-size, -size, -size},
+        {+size, -size, -size},
+        {+size, -size, +size},
+        {-size, -size, +size},
+
+        {+size, +size, +size},
+        {+size, +size, -size},
+        {-size, +size, -size},
+        {-size, +size, +size},
+
+        {-size, -size, -size},
+        {-size, +size, -size},
+        {+size, +size, -size},
+        {+size, -size, -size},
+
+        {+size, +size, +size},
+        {-size, +size, +size},
+        {-size, -size, +size},
+        {+size, -size, +size},
+    };
+
+    elements = {
+        0, 1, 2, 0, 2, 3,
+        4, 5, 6, 4, 6, 7,
+        8, 9, 10, 8, 10, 11,
+        12, 13, 14, 12, 14, 15,
+        16, 17, 18, 16, 18, 19,
+        20, 21, 22, 20, 22, 23,
+    };
+}
+
 void generateTorus(std::vector<glm::vec3> &verts, std::vector<glm::vec3>& norms, std::vector<uint32_t>& elements,
     float outerRadius, float innerRadius, int sides, int rings)
 {
