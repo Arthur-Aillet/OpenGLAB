@@ -35,6 +35,7 @@ void Model::cube(float size) {
 void Model::cow() {
 	vertices = cow_vertices;
 	elements = cow_nvertices;
+	merge_by_distance(vertices, elements, 0.1);
 	generate_normals();
 	Model::setup();
 }
