@@ -4,7 +4,10 @@
 #include <stdio.h>
 
 void Model::plane(int resolution, float size) {
-	generatePlane(vertices, normals, elements, resolution, size);
+	std::vector<glm::vec3> d_colors;
+	generatePlane(vertices, normals, elements, d_colors, resolution, size);
+
+	colors = d_colors;
 	Model::setup();
 }
 
@@ -60,13 +63,21 @@ void Model::setup()
 	glCreateVertexArrays(1, &vaoHandle);
 	glCreateBuffers(1, &vbo_vertices);
 	glCreateBuffers(1, &vbo_normals);
-	glCreateBuffers(1, &ibo_elements); //Gluint ibo_cow_elements
+	if (colors.has_value()) {
+		glCreateBuffers(1, &vbo_colors);
+	}
+	glCreateBuffers(1, &ibo_elements);
 
 	glNamedBufferData(vbo_vertices, vertices.size() * sizeof(float) * 3, vertices.data(), GL_STATIC_DRAW);
 	glVertexArrayVertexBuffer(vaoHandle, 0, vbo_vertices, 0, sizeof(float) * 3);
 
 	glNamedBufferData(vbo_normals, normals.size() * sizeof(float) * 3, normals.data(), GL_STATIC_DRAW);
 	glVertexArrayVertexBuffer(vaoHandle, 1, vbo_normals, 0, sizeof(float) * 3);
+
+	if (colors.has_value()) {
+		glNamedBufferData(vbo_colors, colors.value().size() * sizeof(float) * 3, colors.value().data(), GL_STATIC_DRAW);
+		glVertexArrayVertexBuffer(vaoHandle, 2, vbo_colors, 0, sizeof(float) * 3);
+	}
 
 	glNamedBufferData(ibo_elements, elements.size() * sizeof(uint32_t), elements.data(), GL_STATIC_DRAW);
 	glVertexArrayElementBuffer(vaoHandle, ibo_elements);
@@ -78,6 +89,12 @@ void Model::setup()
 	glVertexArrayAttribFormat(vaoHandle, 1, 3, GL_FLOAT, GL_FALSE, 0);
 	glVertexAttribBinding(1, 1);
 	glEnableVertexArrayAttrib(vaoHandle, 1);
+
+	if (colors.has_value()) {
+		glVertexArrayAttribFormat(vaoHandle, 2, 3, GL_FLOAT, GL_FALSE, 0);
+		glVertexAttribBinding(2, 2);
+		glEnableVertexArrayAttrib(vaoHandle, 2);
+	}
 }
 
 void Model::draw()

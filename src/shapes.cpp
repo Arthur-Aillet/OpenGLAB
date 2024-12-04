@@ -358,29 +358,34 @@ void generateCube(std::vector<glm::vec3>& verts, std::vector<uint32_t>& elements
 }
 
 void generatePlane(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms, std::vector<uint32_t>& elements,
-    int resolution, float size) {
-    for (int i = 0; i != resolution * 2; i++) {
-        for (int j = 0; j != resolution * 2; j++) {
-            verts.push_back(glm::vec3((i - (i % 2 == 0)) * size, 0. , (j - (j % 2 == 0)) * size));
-            norms.push_back(glm::vec3(0., 1., 0.));
+    std::vector<glm::vec3>& color, int resolution, float size) {
+    float tile_size = size / resolution;
 
-            if (i % 2 == 0 && j % 2 == 0) {
-                elements.push_back(i * (resolution * 2) + j);
-                elements.push_back(i * (resolution * 2) + j + 1);
-                elements.push_back((i + 1) * (resolution * 2) + j);
+    for (int i = 0; i != resolution; i++) {
+        for (int j = 0; j != resolution; j++) {
+            //std::cout << i  << "   " << (i - (i % 2 == 0)) << "   " << (i - (i % 2 == 0)) * tile_size << "   " << -size / 2 << "   " << (i - (i % 2 == 0)) * tile_size - size / 2 << "   " << (j - (j % 2 == 0)) * tile_size - size / 2 << std::endl;
+            
+            verts.push_back(glm::vec3(i * tile_size - size / 2, 0., j * tile_size - size / 2));
+            verts.push_back(glm::vec3((i + 1) * tile_size - size / 2, 0., j * tile_size - size / 2));
+            verts.push_back(glm::vec3(i * tile_size - size / 2, 0., (j + 1) * tile_size - size / 2));
+            verts.push_back(glm::vec3((i + 1) * tile_size - size / 2, 0., (j + 1) * tile_size - size / 2));
 
-                elements.push_back(i * (resolution * 2) + j + 1);
-                elements.push_back((i + 1) * (resolution * 2) + j);
-                elements.push_back((i + 1) * (resolution * 2) + j + 1);
+            for (int h = 0; h != 4; h++) {
+                norms.push_back(glm::vec3(0., 1., 0.));
+                if ((i % 2 == 0) ^ (j % 2 == 0)) {
+                    color.push_back(glm::vec3(0., 0., 0.));
+                } else {
+                    color.push_back(glm::vec3(1., 1., 1.));
+                }
             }
-        }
-    }
-    for (int i = 0; i != verts.size(); i++) {
-        std::cout << "  " << verts[i].x << "  " << verts[i].y << "  " << verts[i].z << std::endl;
-    }
 
-    for (int i = 0; i != elements.size() / 3; i += 3) {
-        std::cout << "  " << elements[i] << "  " << elements[i + 1] << "  " << elements[i + 2] << std::endl;
+            elements.push_back(i * resolution * 4 + j * 4);
+            elements.push_back(i * resolution * 4 + j * 4 + 1);
+            elements.push_back(i * resolution * 4 + j * 4 + 2);
+            elements.push_back(i * resolution * 4 + j * 4 + 1);
+            elements.push_back(i * resolution * 4 + j * 4 + 2);
+            elements.push_back(i * resolution * 4 + j * 4 + 3);
+        }
     }
 }
 

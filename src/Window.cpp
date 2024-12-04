@@ -23,6 +23,8 @@ void Window::setupBuffer()
 	shaderProgram->addUniform("ModelViewPerspectiveMatrix");
 	shaderProgram->addUniform("ModelMatrix");
 	shaderProgram->addUniform("NormalMatrix");
+
+	shaderProgram->addUniform("HasVertexColors");
 }
 
 Window::Window(int w, int h)
@@ -46,13 +48,14 @@ Window::Window(int w, int h)
 	models[0]->cow();
 	models[0]->material = Material(glm::vec3(0.2f, 0.8f, 0.2f), glm::vec3(0.1f, 0.9f, 0.9f), glm::vec3(1.f), 32.f);
 	models[1]->teapot(15, glm::mat4(1.f));
-	models[2]->sphere(2, 50, 50);
+	models[2]->sphere(0.5, 50, 50);
 	models[2]->material = Material(glm::vec3(0.2f, 0.2f, 0.8f), glm::vec3(0.9f, 0.1f, 0.9f), glm::vec3(1.f), 32.f);
 	models[3]->torus(2, 1, 50, 50);
 	models[3]->material = Material(glm::vec3(0.8f, 0.2f, 0.8f), glm::vec3(0.1f, 0.9f, 0.1f), glm::vec3(1.f), 32.f);
 	models[4]->cube(2);
 	models[4]->material = Material(glm::vec3(0.8f, 0.2f, 0.2f), glm::vec3(0.1f, 0.1f, 0.9f), glm::vec3(1.f), 32.f);
-	models[5]->plane(6, 1);
+	models[5]->plane(100, 300);
+	models[5]->material = Material(glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f), 32.f);
 }
 
 void Window::draw()
@@ -97,13 +100,21 @@ void Window::draw()
 		glUniform3fv(shaderProgram->uniform("Material.Ks"), 1, glm::value_ptr(material.Ks));
 		glUniform1f(shaderProgram->uniform("Material.Shiness"), material.Shiness);
 
-		glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0), { i * 7 - 14, 0, 0 });
+		glm::mat4 modelMatrix = glm::translate(glm::mat4(1.), { i * 7. - 14., 0., 0. });
 		if (i == 1) { // Rotate Teapot only
 			modelMatrix = glm::rotate(modelMatrix, glm::radians(-90.f), glm::vec3(1, 0, 0));
+		}
+		if (i == 5) {
+			modelMatrix = glm::mat4(1.);
+		}
+		if (i == 2) {
+			modelMatrix = glm::mat4(1.);
 		}
 		glm::mat4 mvp = projection * view * modelMatrix; //Model View Projection Matrix
 		glm::mat3 nmat = glm::mat3(glm::transpose(glm::inverse(modelMatrix))); //Normal Matrix
 
+		bool useColor = models[i]->colors.has_value();
+		glUniform1i(shaderProgram->uniform("HasVertexColors"), useColor);
 		glUniformMatrix4fv(shaderProgram->uniform("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
 		glUniformMatrix4fv(shaderProgram->uniform("ModelViewPerspectiveMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
 		glUniformMatrix3fv(shaderProgram->uniform("NormalMatrix"), 1, GL_FALSE, glm::value_ptr(nmat));
@@ -111,5 +122,4 @@ void Window::draw()
 	}
 
 	shaderProgram->disable();
-	//close shader
 }

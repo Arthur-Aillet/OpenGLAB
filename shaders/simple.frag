@@ -2,6 +2,7 @@
 
 in vec4 Position;
 in vec3 Normal;
+in vec3 Color;
 out vec4 fragColor;
 
 struct LightInfo {
@@ -32,8 +33,8 @@ void main()
 	vec3 lightModel = normalize(distanceLightModel);
 	vec3 V = normalize(CameraPosition - Position.xyz);
 	vec3 reflect = reflect(-lightModel,Normal);
-	vec3 ambiant = Material.Ka * Light.Ia / pow(len, 2);
-	vec3 diffuse = Material.Kd * Light.Id * max(dot(lightModel, Normal), 0.0) / pow(len, 2);
+	vec3 ambiant = Color * Material.Ka * Light.Ia / pow(len, 2);
+	vec3 diffuse = Color * Material.Kd * Light.Id * max(dot(lightModel, Normal), 0.0) / pow(len, 2);
 	vec3 specular = Material.Ks * Light.Is * pow(max(dot(reflect,V), 0.0), Material.Shiness) / pow(len, 2);
 	
 	fragColor = vec4(ambiant + diffuse + specular, 1.0);
