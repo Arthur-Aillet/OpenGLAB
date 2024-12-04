@@ -7,6 +7,8 @@
 #include <glm/glm.hpp>
 #include <vector>
 
+#include "Material.hpp"
+
 class Model
 {
 private:
@@ -20,6 +22,7 @@ private:
 	void setup();
 	void generate_normals();
 public:
+	Material material;
 	void draw();
 	void cow();
 	void cube(float size);

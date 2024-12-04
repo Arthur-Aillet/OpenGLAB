@@ -43,10 +43,14 @@ Window::Window(int w, int h)
 	models.push_back(std::make_unique<Model>());
 
 	models[0]->cow();
-	models[1]->teapot(5, glm::mat4(1.f));
+	models[0]->material = Material(glm::vec3(0.2f, 0.8f, 0.2f), glm::vec3(0.1f, 0.9f, 0.9f), glm::vec3(1.f), 32.f);
+	models[1]->teapot(15, glm::mat4(1.f));
 	models[2]->sphere(2, 50, 50);
+	models[2]->material = Material(glm::vec3(0.2f, 0.2f, 0.8f), glm::vec3(0.9f, 0.1f, 0.9f), glm::vec3(1.f), 32.f);
 	models[3]->torus(2, 1, 50, 50);
+	models[3]->material = Material(glm::vec3(0.8f, 0.2f, 0.8f), glm::vec3(0.1f, 0.9f, 0.1f), glm::vec3(1.f), 32.f);
 	models[4]->cube(2);
+	models[4]->material = Material(glm::vec3(0.8f, 0.2f, 0.2f), glm::vec3(0.1f, 0.1f, 0.9f), glm::vec3(1.f), 32.f);
 }
 
 void Window::draw()
@@ -64,22 +68,12 @@ void Window::draw()
 	glm::mat4 view = glm::lookAt(eye, look, up);
 	glm::mat4 projection = glm::perspective(45.f, (float)(m_width / m_height), 0.1f, 500.f);
 
-	glm::mat4 mvp; //Model View Projection Matrix
-
 	// LightInfo instance
 	LightInfo light = {
 		glm::vec4(12.f, 12.f, 12.f, 1.f),  // Position
 		glm::vec3(0.2f, 0.2f, 0.2f),       // Ia
 		glm::vec3(0.8f, 0.8f, 0.8f),       // Id
 		glm::vec3(1.f, 1.f, 1.f)           // Is
-	};
-
-	// MaterialInfo instance
-	MaterialInfo material = {
-		glm::vec3(0.2f, 0.2f, 0.2f),       // Ka
-		glm::vec3(0.8f, 0.8f, 0.2f),       // Kd
-		glm::vec3(1.f, 1.f, 1.f),          // Ks
-		32.f                               // Shiness
 	};
 
 	shaderProgram->use();
@@ -92,13 +86,15 @@ void Window::draw()
 	glUniform3fv(shaderProgram->uniform("Light.Id"), 1, glm::value_ptr(light.Id));
 	glUniform3fv(shaderProgram->uniform("Light.Is"), 1, glm::value_ptr(light.Is));
 
-	// Set MaterialInfo uniforms
-	glUniform3fv(shaderProgram->uniform("Material.Ka"), 1, glm::value_ptr(material.Ka));
-	glUniform3fv(shaderProgram->uniform("Material.Kd"), 1, glm::value_ptr(material.Kd));
-	glUniform3fv(shaderProgram->uniform("Material.Ks"), 1, glm::value_ptr(material.Ks));
-	glUniform1f(shaderProgram->uniform("Material.Shiness"), material.Shiness);
 
 	for (uint16_t i = 0; i != models.size(); i++) {
+		// Set MaterialInfo uniforms
+		Material material = models[i].get()->material;
+		glUniform3fv(shaderProgram->uniform("Material.Ka"), 1, glm::value_ptr(material.Ka));
+		glUniform3fv(shaderProgram->uniform("Material.Kd"), 1, glm::value_ptr(material.Kd));
+		glUniform3fv(shaderProgram->uniform("Material.Ks"), 1, glm::value_ptr(material.Ks));
+		glUniform1f(shaderProgram->uniform("Material.Shiness"), material.Shiness);
+
 		glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0), { i * 7 - 14, 0, 0 });
 		if (i == 1) { // Rotate Teapot only
 			modelMatrix = glm::rotate(modelMatrix, glm::radians(-90.f), glm::vec3(1, 0, 0));

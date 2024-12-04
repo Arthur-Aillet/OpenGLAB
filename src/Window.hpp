@@ -4,7 +4,7 @@
 #include "GL/gl3w.h"
 #include <string>
 #include "Loader.hpp"
-#include "model.hpp"
+#include "Model.hpp"
 #include "Viewer.hpp"
 #include <glm/gtc/type_ptr.hpp>	
 
@@ -13,13 +13,6 @@ struct LightInfo {
 	glm::vec3 Ia; // Ambient light intensity
 	glm::vec3 Id; // Diffuse light intensity
 	glm::vec3 Is; // Specular light intensity
-};
-
-struct MaterialInfo {
-	glm::vec3 Ka; // Ambient reflectivity
-	glm::vec3 Kd; // Diffuse reflectivity
-	glm::vec3 Ks; // Specular reflectivity
-	float Shiness; // Specular shininess factor (phong exponent)
 };
 
 class Window {
