@@ -20,7 +20,6 @@ struct MaterialInfo {
 };
 uniform MaterialInfo Material;
 
-uniform mat3 NormalMatrix;
 uniform vec3 CameraPosition;
 uniform mat4 ModelMatrix;
 
