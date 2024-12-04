@@ -64,7 +64,6 @@ void Window::draw()
 	glm::mat4 view = glm::lookAt(eye, look, up);
 	glm::mat4 projection = glm::perspective(45.f, (float)(m_width / m_height), 0.1f, 500.f);
 
-	glm::mat3 nmat;
 	glm::mat4 mvp; //Model View Projection Matrix
 
 	// LightInfo instance
@@ -105,7 +104,7 @@ void Window::draw()
 			modelMatrix = glm::rotate(modelMatrix, glm::radians(-90.f), glm::vec3(1, 0, 0));
 		}
 		glm::mat4 mvp = projection * view * modelMatrix; //Model View Projection Matrix
-		nmat = glm::mat3(glm::transpose(glm::inverse(modelMatrix))); //Normal Matrix
+		glm::mat3 nmat = glm::mat3(glm::transpose(glm::inverse(modelMatrix))); //Normal Matrix
 
 		glUniformMatrix4fv(shaderProgram->uniform("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
 		glUniformMatrix4fv(shaderProgram->uniform("ModelViewPerspectiveMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
