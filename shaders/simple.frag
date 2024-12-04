@@ -24,6 +24,15 @@ uniform MaterialInfo Material;
 uniform vec3 CameraPosition;
 uniform mat4 ModelMatrix;
 
+
+vec3 filmic(vec3 x) {
+	vec3 X = max(vec3(0.0), x - 0.004);
+	vec3 result = (X * (6.2 * X + 0.5)) / (X * (6.2 * X + 1.7) + 0.06);
+	return result;
+	//return pow(result, vec3(2.2));
+}
+
+
 void main()
 {
 	vec3 distanceLightModel = (Light.Position - Position).xyz;
@@ -34,8 +43,11 @@ void main()
 	vec3 V = normalize(CameraPosition - Position.xyz);
 	vec3 reflect = reflect(-lightModel,Normal);
 	vec3 ambiant = Color * Material.Ka * Light.Ia / pow(len, 2);
-	vec3 diffuse = Color * Material.Kd * Light.Id * max(dot(lightModel, Normal), 0.0) / pow(len, 2);
+	float lambert = dot(lightModel, Normal);
+	vec3 diffuse = Color * Material.Kd * Light.Id * (lambert * 0.5 + 0.5) / pow(len, 2);
+	vec3 H = normalize(V + lightModel);
+	// vec3 specular = Light.Is * Material.Ks * pow(max(dot(H,Normal), 0.0), Material.Shiness * 2) * max(lambert, 0);
 	vec3 specular = Material.Ks * Light.Is * pow(max(dot(reflect,V), 0.0), Material.Shiness) / pow(len, 2);
 	
-	fragColor = vec4(ambiant + diffuse + specular, 1.0);
+	fragColor = vec4(filmic(ambiant + diffuse + specular), 1.0);
 }
