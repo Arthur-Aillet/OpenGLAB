@@ -20,6 +20,7 @@ public:
 	Window(int w, int h);
 	void draw();
 	Viewer *viewer;
+	void setSize(int w, int h);
 
 private:
 	ShaderProgram* shaderProgram;
@@ -31,7 +32,7 @@ private:
 
 	std::vector<std::unique_ptr<Model>> models;
 
-	int m_width;
-	int m_height;
+	int width;
+	int height;
 	void setupBuffer();
 };

@@ -27,10 +27,19 @@ void Window::setupBuffer()
 	shaderProgram->addUniform("HasVertexColors");
 }
 
+void Window::setSize(int w, int h) {
+	float aspect = (w / (float)h);
+
+	width = w;
+	height = h;
+	
+	viewer->setAspectRatio(aspect);
+}
+
 Window::Window(int w, int h)
 {
-	m_width = w;
-	m_height = h;
+	width = w;
+	height = h;
 	glm::vec3 viewPoint(DEFAULT_VIEW_POINT[0], DEFAULT_VIEW_POINT[1], DEFAULT_VIEW_POINT[2]);
 	glm::vec3 viewCenter(DEFAULT_VIEW_CENTER[0], DEFAULT_VIEW_CENTER[1], DEFAULT_VIEW_CENTER[2]);
 	glm::vec3 upVector(DEFAULT_UP_VECTOR[0], DEFAULT_UP_VECTOR[1], DEFAULT_UP_VECTOR[2]);
@@ -48,7 +57,7 @@ Window::Window(int w, int h)
 	models[0]->cow();
 	models[0]->material = Material(glm::vec3(0.2f, 0.8f, 0.2f), glm::vec3(0.1f, 0.9f, 0.9f), glm::vec3(1.f), 32.f);
 	models[1]->teapot(15, glm::mat4(1.f));
-	models[2]->sphere(0.5, 50, 50);
+	models[2]->sphere(2, 50, 50);
 	models[2]->material = Material(glm::vec3(0.2f, 0.2f, 0.8f), glm::vec3(0.9f, 0.1f, 0.9f), glm::vec3(1.f), 32.f);
 	models[3]->torus(2, 1, 50, 50);
 	models[3]->material = Material(glm::vec3(0.8f, 0.2f, 0.8f), glm::vec3(0.1f, 0.9f, 0.1f), glm::vec3(1.f), 32.f);
@@ -65,13 +74,13 @@ void Window::draw()
 	glEnable(GL_DEPTH_TEST); // enable depth test
 
 	// first to parameters: starting point , next two parameters : width and height
-	glViewport(0, 0, m_width, m_height); // set up the screen space
+	glViewport(0, 0, width, height); // set up the screen space
 
 	glm::vec3 eye = viewer->getViewPoint();
 	glm::vec3 look = viewer->getViewCenter();
 	glm::vec3 up = viewer->getUpVector();
 	glm::mat4 view = glm::lookAt(eye, look, up);
-	glm::mat4 projection = glm::perspective(45.f, (float)(m_width / m_height), 0.1f, 500.f);
+	glm::mat4 projection = glm::perspective(45.f, (float)(width) / height, 0.1f, 500.f);
 
 	// LightInfo instance
 	LightInfo light = {
@@ -107,8 +116,15 @@ void Window::draw()
 		if (i == 5) {
 			modelMatrix = glm::mat4(1.);
 		}
+		if (i == 4) {
+			modelMatrix = glm::translate(modelMatrix, glm::vec3(0., 1., 0.));
+		}
+		if (i == 3) {
+			modelMatrix = glm::translate(modelMatrix, glm::vec3(0., 1., 0.));
+			modelMatrix = glm::rotate(modelMatrix, glm::radians(-90.f), glm::vec3(1, 0, 0));
+		}
 		if (i == 2) {
-			modelMatrix = glm::mat4(1.);
+			modelMatrix = glm::translate(glm::mat4(1.), { 0., 2, 0. });
 		}
 		glm::mat4 mvp = projection * view * modelMatrix; //Model View Projection Matrix
 		glm::mat3 nmat = glm::mat3(glm::transpose(glm::inverse(modelMatrix))); //Normal Matrix

@@ -10,12 +10,11 @@ bool mbutton_down;
 double m_lastMouseX;
 double m_lastMouseY;
 double cx, cy;
+Window* global_window;
 
-void window_size_callback(GLFWwindow* window, int width, int height)
+void window_size_callback(GLFWwindow* _window, int width, int height)
 {
-    /*  window->setSize(width, height);
-      window->setAspect(width / (float)height);*/
-
+    global_window->setSize(width, height);
 }
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -130,6 +129,8 @@ int main() {
 
 
     std::shared_ptr<Window> win = std::make_shared<Window>(width, height);
+
+    global_window = win.get();
 
     while (!glfwWindowShouldClose(window))
     {
