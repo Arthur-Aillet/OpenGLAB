@@ -29,4 +29,5 @@ public:
 	void torus(float outerRadius, float innerRadius, int sides, int rings);
 	void sphere(float radius, uint32_t slices, uint32_t stacks);
 	void teapot(int grid, glm::mat4 lidTransform);
+	void plane(int resolution, float size);
 };

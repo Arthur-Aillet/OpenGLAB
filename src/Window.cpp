@@ -41,6 +41,7 @@ Window::Window(int w, int h)
 	models.push_back(std::make_unique<Model>());
 	models.push_back(std::make_unique<Model>());
 	models.push_back(std::make_unique<Model>());
+	models.push_back(std::make_unique<Model>());
 
 	models[0]->cow();
 	models[0]->material = Material(glm::vec3(0.2f, 0.8f, 0.2f), glm::vec3(0.1f, 0.9f, 0.9f), glm::vec3(1.f), 32.f);
@@ -51,6 +52,7 @@ Window::Window(int w, int h)
 	models[3]->material = Material(glm::vec3(0.8f, 0.2f, 0.8f), glm::vec3(0.1f, 0.9f, 0.1f), glm::vec3(1.f), 32.f);
 	models[4]->cube(2);
 	models[4]->material = Material(glm::vec3(0.8f, 0.2f, 0.2f), glm::vec3(0.1f, 0.1f, 0.9f), glm::vec3(1.f), 32.f);
+	models[5]->plane(6, 1);
 }
 
 void Window::draw()
@@ -70,10 +72,10 @@ void Window::draw()
 
 	// LightInfo instance
 	LightInfo light = {
-		glm::vec4(12.f, 12.f, 12.f, 1.f),  // Position
-		glm::vec3(0.2f, 0.2f, 0.2f),       // Ia
-		glm::vec3(0.8f, 0.8f, 0.8f),       // Id
-		glm::vec3(1.f, 1.f, 1.f)           // Is
+		glm::vec4(10.f, 10.f, 10.f, 1.f),   // Position
+		glm::vec3(0.2f, 0.2f, 0.2f) * 10.f, // Ia
+		glm::vec3(0.8f, 0.8f, 0.8f) * 10.f, // Id
+		glm::vec3(1.f, 1.f, 1.f) * 10.f     // Is
 	};
 
 	shaderProgram->use();

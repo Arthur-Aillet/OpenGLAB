@@ -25,12 +25,16 @@ uniform mat4 ModelMatrix;
 
 void main()
 {
-	vec3 LightModel = normalize((Light.Position - Position).xyz);
+	vec3 distanceLightModel = (Light.Position - Position).xyz;
+	float len = distanceLightModel.length();
+
+
+	vec3 lightModel = normalize(distanceLightModel);
 	vec3 V = normalize(CameraPosition - Position.xyz);
-	vec3 Reflect = reflect(-LightModel,Normal);
-	vec3 ambiant = Material.Ka * Light.Ia;
-	vec3 diffuse = Material.Kd * Light.Id * max(dot(LightModel, Normal), 0.0);
-	vec3 specular = Material.Ks * Light.Is * pow(max(dot(Reflect,V), 0.0), Material.Shiness);
+	vec3 reflect = reflect(-lightModel,Normal);
+	vec3 ambiant = Material.Ka * Light.Ia / pow(len, 2);
+	vec3 diffuse = Material.Kd * Light.Id * max(dot(lightModel, Normal), 0.0) / pow(len, 2);
+	vec3 specular = Material.Ks * Light.Is * pow(max(dot(reflect,V), 0.0), Material.Shiness) / pow(len, 2);
 	
 	fragColor = vec4(ambiant + diffuse + specular, 1.0);
 }

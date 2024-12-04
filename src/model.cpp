@@ -3,6 +3,11 @@
 #include "shapes.hpp"
 #include <stdio.h>
 
+void Model::plane(int resolution, float size) {
+	generatePlane(vertices, normals, elements, resolution, size);
+	Model::setup();
+}
+
 void Model::torus(float outerRadius, float innerRadius, int sides, int rings) {
 	generateTorus(vertices, normals, elements, outerRadius, innerRadius, sides, rings);
 	Model::setup();

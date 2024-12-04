@@ -223,10 +223,10 @@ void moveLid(int grid, float* v, glm::mat4 lidTransform) {
     }
 }
 
-void generateTeapot(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms, std::vector<uint32_t>& elements, int grid, glm::mat4 lidTransform) {
+void generateTeapot(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms, std::vector<uint32_t>& elements, 
+    int grid, glm::mat4 lidTransform) {
     uint32_t nverts = 32 * (grid + 1) * (grid + 1);
     uint32_t faces = grid * grid * 32;
-
 
     float* v = new float[nverts * 3];  //vertex positions : vec3
     float* n = new float[nverts * 3];  //vertex normals : vec3
@@ -238,7 +238,7 @@ void generateTeapot(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms
     verts.reserve(nverts * 3);
     norms.reserve(nverts * 3);
 
-    for (int i = 0; i < nverts * 3; i += 3) {
+    for (uint32_t i = 0; i < nverts * 3; i += 3) {
         verts.push_back({ v[i], v[i + 1], v[i + 2] });
         norms.push_back({ n[i], n[i + 1], n[i + 2] });
     }
@@ -355,6 +355,33 @@ void generateCube(std::vector<glm::vec3>& verts, std::vector<uint32_t>& elements
         16, 17, 18, 16, 18, 19,
         20, 21, 22, 20, 22, 23,
     };
+}
+
+void generatePlane(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms, std::vector<uint32_t>& elements,
+    int resolution, float size) {
+    for (int i = 0; i != resolution * 2; i++) {
+        for (int j = 0; j != resolution * 2; j++) {
+            verts.push_back(glm::vec3((i - (i % 2 == 0)) * size, 0. , (j - (j % 2 == 0)) * size));
+            norms.push_back(glm::vec3(0., 1., 0.));
+
+            if (i % 2 == 0 && j % 2 == 0) {
+                elements.push_back(i * (resolution * 2) + j);
+                elements.push_back(i * (resolution * 2) + j + 1);
+                elements.push_back((i + 1) * (resolution * 2) + j);
+
+                elements.push_back(i * (resolution * 2) + j + 1);
+                elements.push_back((i + 1) * (resolution * 2) + j);
+                elements.push_back((i + 1) * (resolution * 2) + j + 1);
+            }
+        }
+    }
+    for (int i = 0; i != verts.size(); i++) {
+        std::cout << "  " << verts[i].x << "  " << verts[i].y << "  " << verts[i].z << std::endl;
+    }
+
+    for (int i = 0; i != elements.size() / 3; i += 3) {
+        std::cout << "  " << elements[i] << "  " << elements[i + 1] << "  " << elements[i + 2] << std::endl;
+    }
 }
 
 void generateTorus(std::vector<glm::vec3> &verts, std::vector<glm::vec3>& norms, std::vector<uint32_t>& elements,
