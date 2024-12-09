@@ -10,9 +10,7 @@ void Window::setupBuffer()
 	shaderProgram->initFromFiles("shaders/simple.vert", "shaders/simple.frag");
 
 	shaderProgram->addUniform("Light.Position");
-	shaderProgram->addUniform("Light.Ia");
-	shaderProgram->addUniform("Light.Id");
-	shaderProgram->addUniform("Light.Is");
+	shaderProgram->addUniform("Light.Intensity");
 
 	shaderProgram->addUniform("Material.Ka");
 	shaderProgram->addUniform("Material.Kd");
@@ -55,26 +53,27 @@ Window::Window(int w, int h)
 	models.push_back(std::make_unique<Model>());
 
 	models[0]->cow();
-	models[0]->material = Material(glm::vec3(0.04f, 0.8f, 0.04f), glm::vec3(0.1f, 0.8f, 0.8f), glm::vec3(1.f), 32.f);
+	models[0]->material = Material(glm::vec3(0.04f, 0.8f, 0.04f) * 0.1f, glm::vec3(0.1f, 0.8f, 0.8f), glm::vec3(1.f), 32.f);
 	models[1]->teapot(15, glm::mat4(1.f));
 	models[2]->sphere(2, 50, 50);
-	models[2]->material = Material(glm::vec3(0.04f, 0.04f, 0.8f), glm::vec3(0.8f, 0.05f, 0.8f), glm::vec3(1.f), 32.f);
+	models[2]->material = Material(glm::vec3(0.04f, 0.04f, 0.8f) * 0.1f, glm::vec3(0.8f, 0.05f, 0.8f), glm::vec3(1.f), 32.f);
 	models[3]->torus(2, 1, 50, 50);
-	models[3]->material = Material(glm::vec3(0.8f, 0.1f, 0.8f), glm::vec3(0.03f, 0.8f, 0.03f), glm::vec3(1.f), 32.f);
+	models[3]->material = Material(glm::vec3(0.8f, 0.1f, 0.8f) * 0.4f * 0.1f, glm::vec3(0.05f, 0.9f, 0.05f), glm::vec3(1.f), 32.f);
 	models[4]->cube(2);
-	models[4]->material = Material(glm::vec3(0.8f, 0.04f, 0.04f), glm::vec3(0.1f, 0.1f, 0.8f), glm::vec3(1.f), 32.f);
+	models[4]->material = Material(glm::vec3(0.8f, 0.04f, 0.04f) * 0.1f, glm::vec3(0.1f, 0.1f, 0.8f), glm::vec3(1.f), 32.f);
 	models[5]->plane(100, 300);
-	models[5]->material = Material(glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f), 32.f);
-}
+	models[5]->material = Material(glm::vec3(1.f, 1.f, 1.f) * 0.002f, glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f), 32.f);
 
-void Window::draw()
-{
-	glClearColor((GLfloat) 0.2,(GLfloat) 0.2,(GLfloat) 0.2, 1); //background color R G B A
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor((GLfloat)0.2, (GLfloat)0.2, (GLfloat)0.2, 1); //background color R G B A
 	glEnable(GL_DEPTH_TEST); // enable depth test
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
+}
+
+void Window::draw()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// first to parameters: starting point , next two parameters : width and height
 	glViewport(0, 0, width, height); // set up the screen space
@@ -86,11 +85,16 @@ void Window::draw()
 	glm::mat4 projection = glm::perspective(45.f, (float)(width) / height, 0.1f, 500.f);
 
 	// LightInfo instance
+	//LightInfo light = {
+	//	glm::vec4(10.f, 10.f, 10.f, 1.f),   // Position
+	//	glm::vec3(0.08f, 0.08f, 0.08f) * 5.f, // Ia
+	//	glm::vec3(0.85f, 0.85f, 0.85f) * 6.5f, // Id
+	//	glm::vec3(1.f, 1.f, 1.f) * 6.5f     // Is
+	//};
+
 	LightInfo light = {
-		glm::vec4(10.f, 10.f, 10.f, 1.f),   // Position
-		glm::vec3(0.08f, 0.08f, 0.08f) * 5.f, // Ia
-		glm::vec3(0.85f, 0.85f, 0.85f) * 6.5f, // Id
-		glm::vec3(1.f, 1.f, 1.f) * 6.5f     // Is
+		glm::vec4(8.f, 8.f, 8.f, 1.f),   // Position
+		glm::vec3(1.f, 1.f, 1.f) * 6.5f     // Intensity
 	};
 
 	shaderProgram->use();
@@ -99,9 +103,7 @@ void Window::draw()
 	glUniform3fv(shaderProgram->uniform("CameraPosition"), 1, glm::value_ptr(eye));
 	
 	glUniform4fv(shaderProgram->uniform("Light.Position"), 1, glm::value_ptr(light.Position));
-	glUniform3fv(shaderProgram->uniform("Light.Ia"), 1, glm::value_ptr(light.Ia));
-	glUniform3fv(shaderProgram->uniform("Light.Id"), 1, glm::value_ptr(light.Id));
-	glUniform3fv(shaderProgram->uniform("Light.Is"), 1, glm::value_ptr(light.Is));
+	glUniform3fv(shaderProgram->uniform("Light.Intensity"), 1, glm::value_ptr(light.Intensity));
 
 
 	for (uint16_t i = 0; i != models.size(); i++) {

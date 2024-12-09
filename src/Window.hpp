@@ -10,9 +10,7 @@
 
 struct LightInfo {
 	glm::vec4 Position; // Light position in eye coords.
-	glm::vec3 Ia; // Ambient light intensity
-	glm::vec3 Id; // Diffuse light intensity
-	glm::vec3 Is; // Specular light intensity
+	glm::vec3 Intensity; // Ambient light intensity
 };
 
 class Window {
