@@ -72,6 +72,9 @@ void Window::draw()
 	glClearColor((GLfloat) 0.2,(GLfloat) 0.2,(GLfloat) 0.2, 1); //background color R G B A
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST); // enable depth test
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CCW);
+	glCullFace(GL_BACK);
 
 	// first to parameters: starting point , next two parameters : width and height
 	glViewport(0, 0, width, height); // set up the screen space

@@ -379,8 +379,8 @@ void generatePlane(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms,
                 }
             }
 
-            elements.push_back(i * resolution * 4 + j * 4);
             elements.push_back(i * resolution * 4 + j * 4 + 1);
+            elements.push_back(i * resolution * 4 + j * 4);
             elements.push_back(i * resolution * 4 + j * 4 + 2);
             elements.push_back(i * resolution * 4 + j * 4 + 1);
             elements.push_back(i * resolution * 4 + j * 4 + 2);
