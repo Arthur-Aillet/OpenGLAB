@@ -86,8 +86,8 @@ void Window::draw()
 	LightInfo light = {
 		glm::vec4(10.f, 10.f, 10.f, 1.f),   // Position
 		glm::vec3(0.08f, 0.08f, 0.08f) * 5.f, // Ia
-		glm::vec3(0.8f, 0.8f, 0.8f) * 5.f, // Id
-		glm::vec3(1.f, 1.f, 1.f) * 5.f     // Is
+		glm::vec3(0.85f, 0.85f, 0.85f) * 6.5f, // Id
+		glm::vec3(1.f, 1.f, 1.f) * 6.5f     // Is
 	};
 
 	shaderProgram->use();

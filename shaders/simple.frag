@@ -44,7 +44,7 @@ void main()
 	vec3 reflect = reflect(-lightModel,Normal);
 	vec3 ambiant = Color * Material.Ka * Light.Ia / pow(len, 2);
 	float lambert = dot(lightModel, Normal);
-	vec3 diffuse = Color * Material.Kd * Light.Id * (lambert * 0.5 + 0.5) / pow(len, 2);
+	vec3 diffuse = Color * Material.Kd * Light.Id * (lambert * 0.60 + 0.40) / pow(len, 2);
 	vec3 H = normalize(V + lightModel);
 	// vec3 specular = Light.Is * Material.Ks * pow(max(dot(H,Normal), 0.0), Material.Shiness * 2) * max(lambert, 0);
 	vec3 specular = Material.Ks * Light.Is * pow(max(dot(reflect,V), 0.0), Material.Shiness) / pow(len, 2);

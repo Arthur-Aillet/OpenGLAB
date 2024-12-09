@@ -373,9 +373,9 @@ void generatePlane(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms,
             for (int h = 0; h != 4; h++) {
                 norms.push_back(glm::vec3(0., 1., 0.));
                 if ((i % 2 == 0) ^ (j % 2 == 0)) {
-                    color.push_back(glm::vec3(0., 0., 0.));
+                    color.push_back(glm::vec3(0.1, 0.1, 0.1));
                 } else {
-                    color.push_back(glm::vec3(1., 1., 1.));
+                    color.push_back(glm::vec3(0.7, 0.7, 0.7));
                 }
             }
 
