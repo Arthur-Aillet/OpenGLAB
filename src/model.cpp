@@ -4,6 +4,33 @@
 #include "shapes.hpp"
 #include <stdio.h>
 
+#define TINYOBJLOADER_IMPLEMENTATION 
+#include "tinyobj_loader_opt.h"
+
+
+std::vector<glm::vec3>& reinterpretAsVec3(std::vector<float>& input) {
+	return reinterpret_cast<std::vector<glm::vec3>&>(input);
+}
+
+void Model::obj(const std::string path) {
+	tinyobj::attrib_t attrib;
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materials; 
+	std::string warn;
+	std::string err;
+	tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, &path[0], &"./"[0], true, true);
+
+	vertices = reinterpretAsVec3(attrib.vertices);
+	normals = reinterpretAsVec3(attrib.normals);
+
+	for (tinyobj::shape_t &shape: shapes) {
+		for (tinyobj::index_t &index: shape.mesh.indices) {
+			elements.push_back(index.vertex_index);
+		}
+	}
+
+	Model::setup();
+}
 
 void Model::plane(int resolution, float size) {
 	std::vector<glm::vec3> d_colors;

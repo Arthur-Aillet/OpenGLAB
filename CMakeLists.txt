@@ -16,6 +16,8 @@ include_directories(${OPENGL_INCLUDE_DIRS})
 add_executable(project "src/main.cpp" "src/Window.hpp" "src/bunny.hpp" "src/Material.hpp" "src/Material.cpp" "src/Window.cpp" "src/Loader.hpp" "src/Viewer.cpp" "src/Viewer.hpp" "src/Model.hpp" "src/Model.cpp" "src/Viewer.hpp" "src/shapes.cpp" "src/shapes.hpp" "src/teapotData.hpp" "src/Material.cpp")
 #raster3d.cpp cow.h ppm_io.cpp ppm_io.h
 
+target_include_directories(project PUBLIC "src/objLoader/")
+
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET project PROPERTY CXX_STANDARD 20)
 endif()

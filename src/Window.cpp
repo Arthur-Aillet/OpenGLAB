@@ -56,6 +56,7 @@ Window::Window(int w, int h)
 	models.push_back(std::make_unique<Model>());
 	models.push_back(std::make_unique<Model>());
 	models.push_back(std::make_unique<Model>());
+	models.push_back(std::make_unique<Model>());
 
 	models[0]->cow();
 	models[0]->material = Material(glm::vec3(0.04f, 0.8f, 0.04f) * 0.1f, glm::vec3(0.1f, 0.8f, 0.8f), glm::vec3(1.f), 32.f);
@@ -70,6 +71,7 @@ Window::Window(int w, int h)
 	models[5]->material = Material(glm::vec3(1.f, 1.f, 1.f) * 0.002f, glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f), 32.f);
 	models[6]->bunny();
 	models[6]->material = Material(glm::vec3(1.f, 1.f, 1.f) * 0.002f, glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f), 32.f);
+	models[7]->obj("./suzanne.obj");
 
 	glClearColor((GLfloat)0.2, (GLfloat)0.2, (GLfloat)0.2, 1); //background color R G B A
 	glEnable(GL_DEPTH_TEST); // enable depth test
