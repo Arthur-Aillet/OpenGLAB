@@ -16,3 +16,5 @@ void generateCube(std::vector<glm::vec3>& verts, std::vector<uint32_t>& elements
 
 void generatePlane(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms, std::vector<uint32_t>& elements,
 	std::vector<glm::vec3>& color, int resolution, float size);
+
+void generateBunny(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms, std::vector<uint32_t>& elements);

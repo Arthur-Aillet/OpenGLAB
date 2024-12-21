@@ -118,9 +118,6 @@ int main() {
         glGetString(GL_SHADING_LANGUAGE_VERSION));
     glfwSwapInterval(1);
 
-    printf("OpenGL %s, GLSL %s\n",
-        glGetString(GL_VERSION), glGetString(GL_SHADING_LANGUAGE_VERSION));
-
     glfwSetWindowSizeCallback(window, window_size_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetCursorPosCallback(window, cursor_pos_callback);

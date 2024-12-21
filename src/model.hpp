@@ -34,8 +34,10 @@ public:
 	std::optional<std::vector<glm::vec3>> colors;
 	Material material;
 
+	void obj(std::string path);
 	void draw();
 	void cow();
+	void bunny();
 	void cube(float size);
 	void torus(float outerRadius, float innerRadius, int sides, int rings);
 	void sphere(float radius, uint32_t slices, uint32_t stacks);

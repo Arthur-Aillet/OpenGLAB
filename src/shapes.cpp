@@ -1,4 +1,5 @@
 #include "shapes.hpp"
+#include "bunny.hpp"
 #include "teapotData.hpp"
 
 #include <glm/glm.hpp>
@@ -373,7 +374,7 @@ void generatePlane(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms,
             for (int h = 0; h != 4; h++) {
                 norms.push_back(glm::vec3(0., 1., 0.));
                 if ((i % 2 == 0) ^ (j % 2 == 0)) {
-                    color.push_back(glm::vec3(0.1, 0.1, 0.1));
+                    color.push_back(glm::vec3(0.05, 0.05, 0.05));
                 } else {
                     color.push_back(glm::vec3(0.7, 0.7, 0.7));
                 }
@@ -430,4 +431,13 @@ void generateTorus(std::vector<glm::vec3> &verts, std::vector<glm::vec3>& norms,
             elements.push_back(ringStart + nextSide);
         }
     }
+}
+
+void generateBunny(std::vector<glm::vec3>& verts, std::vector<glm::vec3>& norms, std::vector<uint32_t>& elements)
+{
+    for (auto vertex: bunnyModelVertices) {
+        verts.push_back(vertex.position);
+        norms.push_back(vertex.normal);
+    }
+    elements = std::vector<uint32_t>(bunnyModelIndices, bunnyModelIndices + 432138);
 }

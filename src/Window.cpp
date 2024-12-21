@@ -9,9 +9,6 @@ void Window::setupBuffer()
 	shaderProgram = new ShaderProgram();
 	shaderProgram->initFromFiles("shaders/simple.vert", "shaders/simple.frag");
 
-	shaderProgram->addUniform("Light.Position");
-	shaderProgram->addUniform("Light.Intensity");
-
 	shaderProgram->addUniform("Material.Ka");
 	shaderProgram->addUniform("Material.Kd");
 	shaderProgram->addUniform("Material.Ks");
@@ -23,6 +20,13 @@ void Window::setupBuffer()
 	shaderProgram->addUniform("NormalMatrix");
 
 	shaderProgram->addUniform("HasVertexColors");
+
+	for (int i = 0; i < 5; i++) {
+		std::string pos_name = "Lights[" + std::to_string(i) + "].Position";
+		shaderProgram->addUniform(pos_name);
+		std::string int_name = "Lights[" + std::to_string(i) + "].Intensity";
+		shaderProgram->addUniform(int_name);
+	}
 }
 
 void Window::setSize(int w, int h) {
@@ -51,6 +55,7 @@ Window::Window(int w, int h)
 	models.push_back(std::make_unique<Model>());
 	models.push_back(std::make_unique<Model>());
 	models.push_back(std::make_unique<Model>());
+	models.push_back(std::make_unique<Model>());
 
 	models[0]->cow();
 	models[0]->material = Material(glm::vec3(0.04f, 0.8f, 0.04f) * 0.1f, glm::vec3(0.1f, 0.8f, 0.8f), glm::vec3(1.f), 32.f);
@@ -63,6 +68,8 @@ Window::Window(int w, int h)
 	models[4]->material = Material(glm::vec3(0.8f, 0.04f, 0.04f) * 0.1f, glm::vec3(0.1f, 0.1f, 0.8f), glm::vec3(1.f), 32.f);
 	models[5]->plane(100, 300);
 	models[5]->material = Material(glm::vec3(1.f, 1.f, 1.f) * 0.002f, glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f), 32.f);
+	models[6]->bunny();
+	models[6]->material = Material(glm::vec3(1.f, 1.f, 1.f) * 0.002f, glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f), 32.f);
 
 	glClearColor((GLfloat)0.2, (GLfloat)0.2, (GLfloat)0.2, 1); //background color R G B A
 	glEnable(GL_DEPTH_TEST); // enable depth test
@@ -86,28 +93,53 @@ void Window::draw()
 
 	// LightInfo instance
 	//LightInfo light = {
-	//	glm::vec4(10.f, 10.f, 10.f, 1.f),   // Position
+	//	glm::vec4(10.f, 10.f, 10.f, 1.f),
 	//	glm::vec3(0.08f, 0.08f, 0.08f) * 5.f, // Ia
 	//	glm::vec3(0.85f, 0.85f, 0.85f) * 6.5f, // Id
 	//	glm::vec3(1.f, 1.f, 1.f) * 6.5f     // Is
 	//};
 
-	LightInfo light = {
-		glm::vec4(8.f, 8.f, 8.f, 1.f),   // Position
-		glm::vec3(1.f, 1.f, 1.f) * 6.5f     // Intensity
+	LightInfo lights[5];
+
+	lights[0] = {
+		glm::vec4(cos(glm::radians(72.f) * 0) * 10, 10.f, sin(glm::radians(72.f) * 0) * 10, 1.f),
+		glm::vec3(0.f, 0.8f, 0.8f) * 3.f
 	};
 
+	lights[1] = {
+		glm::vec4(cos(glm::radians(72.f) * 1) * 10, 10.f, sin(glm::radians(72.f) * 1) * 10, 1.f),
+		glm::vec3(0.0f, 0.0f, 0.8f) * 3.f
+	};
+
+	lights[2] = {
+		glm::vec4(cos(glm::radians(72.f) * 2) * 10, 10.f, sin(glm::radians(72.f) * 2) * 10, 1.f),
+		glm::vec3(0.8f, 0.0f, 0.0f) * 3.f
+	};
+
+	lights[3] = {
+		glm::vec4(cos(glm::radians(72.f) * 3) * 10, 10.f, sin(glm::radians(72.f) * 3) * 10, 1.f),
+		glm::vec3(0.0f, 0.8f, 0.8f) * 3.f
+	};
+
+	lights[4] = {
+		glm::vec4(cos(glm::radians(72.f) * 4) * 10, 10.f, sin(glm::radians(72.f) * 4) * 10, 1.f),
+		glm::vec3(0.8f, 0.8f, 0.8f) * 3.f
+	};
 	shaderProgram->use();
 
 	// Set LightInfo uniforms
 	glUniform3fv(shaderProgram->uniform("CameraPosition"), 1, glm::value_ptr(eye));
 	
-	glUniform4fv(shaderProgram->uniform("Light.Position"), 1, glm::value_ptr(light.Position));
-	glUniform3fv(shaderProgram->uniform("Light.Intensity"), 1, glm::value_ptr(light.Intensity));
-
+	for (int i = 0; i < 5; i++) {
+		glUniform4fv(shaderProgram->uniform("Lights[" + std::to_string(i) + "].Position"), 1, glm::value_ptr(lights[i].Position));
+		glUniform3fv(shaderProgram->uniform("Lights[" + std::to_string(i) + "].Intensity"), 1, glm::value_ptr(lights[i].Intensity));
+	}
 
 	for (uint16_t i = 0; i != models.size(); i++) {
 		// Set MaterialInfo uniforms
+		//if (i != 6 && i != 5) {
+	//		continue;
+		//}
 		Material material = models[i].get()->material;
 		glUniform3fv(shaderProgram->uniform("Material.Ka"), 1, glm::value_ptr(material.Ka));
 		glUniform3fv(shaderProgram->uniform("Material.Kd"), 1, glm::value_ptr(material.Kd));

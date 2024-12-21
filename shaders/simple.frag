@@ -9,7 +9,7 @@ struct LightInfo {
 	vec4 Position; // Light position in eye coords.
 	vec3 Intensity; // Ambient light intensity
 };
-uniform LightInfo Light;
+uniform LightInfo Lights[5];
 
 struct MaterialInfo {
 	vec3 Ka; // Ambient reflectivity
@@ -31,21 +31,24 @@ vec3 filmic(vec3 x) {
 }
 
 
-void main()
+void main(void)
 {
-	vec3 distanceLightModel = (Light.Position - Position).xyz;
-	float len = distanceLightModel.length();
+	vec3 finalColor = vec3(0,0,0);
 
+	for (int i=0; i<5; i++) {
+		vec3 distanceLightModel = (Lights[i].Position - Position).xyz;
+		vec3 lightModel = normalize(distanceLightModel);
+		vec3 V = normalize(CameraPosition - Position.xyz);
+		vec3 reflect = reflect(-lightModel,Normal);
+		float lambert = dot(lightModel, Normal);
+		vec3 H = normalize(V + lightModel);
 
-	vec3 lightModel = normalize(distanceLightModel);
-	vec3 V = normalize(CameraPosition - Position.xyz);
-	vec3 reflect = reflect(-lightModel,Normal);
-	vec3 ambiant = Color * Material.Ka;
-	float lambert = dot(lightModel, Normal);
-	vec3 diffuse = Color * Material.Kd * Light.Intensity * (lambert * 0.60 + 0.40) / pow(len, 2);
-	vec3 H = normalize(V + lightModel);
-	// vec3 specular = Light.Is * Material.Ks * pow(max(dot(H,Normal), 0.0), Material.Shiness * 2) * max(lambert, 0);
-	vec3 specular = Material.Ks * Light.Intensity * pow(max(dot(reflect,V), 0.0), Material.Shiness) / pow(len, 2);
-	
-	fragColor = vec4(filmic(ambiant + diffuse + specular), 1.0);
+		float len = distanceLightModel.length();
+		vec3 diffuse = Color * Material.Kd * Lights[i].Intensity * (lambert * 0.60 + 0.40) / pow(len, 2);
+		vec3 specular = Material.Ks * Lights[i].Intensity * pow(max(dot(reflect,V), 0.0), Material.Shiness) / pow(len, 2);
+		finalColor = finalColor + diffuse + specular;
+	}
+
+	vec3 ambient = Color * Material.Ka;
+	fragColor = vec4(filmic(finalColor + ambient), 1.0);
 }

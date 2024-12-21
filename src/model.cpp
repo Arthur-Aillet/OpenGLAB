@@ -1,7 +1,9 @@
 #include "model.hpp"
 #include "cow.hpp"
+#include "bunny.hpp"
 #include "shapes.hpp"
 #include <stdio.h>
+
 
 void Model::plane(int resolution, float size) {
 	std::vector<glm::vec3> d_colors;
@@ -28,6 +30,12 @@ void Model::teapot(int grid, glm::mat4 lidTransform) {
 
 void Model::cube(float size) {
 	generateCube(vertices, elements, size);
+	generate_normals();
+	Model::setup();
+}
+
+void Model::bunny() {
+	generateBunny(vertices, normals, elements);
 	generate_normals();
 	Model::setup();
 }
